@@ -1,0 +1,8 @@
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+doppelclick
+doppelclick_automoc.cpp
+moc_doppelclick.cpp
+*.swp
+CMakeFiles/
