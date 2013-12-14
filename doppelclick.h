@@ -2,19 +2,22 @@
 #define DOPPELCLICK_H
 
 #include <QMainWindow>
+#include <QPushButton>
 
 namespace Ui {
         class Doppelclick;
 }
 
-class Doppelclick : public QMainWindow
+class Doppelclick : public QWidget
 {
             Q_OBJECT
 
         public:
-                    Doppelclick(void);
+                    explicit Doppelclick(QWidget *parent=0);
 
         private:
+                    void initializeUi(void);
+                    QPushButton *doppelButton;
 
 };
 
