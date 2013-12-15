@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QLabel>
 
 namespace Ui {
         class Doppelclick;
@@ -16,8 +17,12 @@ class Doppelclick : public QWidget
                     explicit Doppelclick(QWidget *parent=0);
 
         private:
+                    /* private Methodes */
                     void initializeUi(void);
+
+                    /* GUI Elements */
                     QPushButton *doppelButton;
+                    QLabel *gameState;
 
 };
 
