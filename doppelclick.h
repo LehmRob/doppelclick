@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLabel>
+#include <QPixmap>
 
 namespace Ui {
         class Doppelclick;
@@ -22,8 +23,18 @@ class Doppelclick : public QWidget
 
                     /* GUI Elements */
                     QPushButton *doppelButton;
-                    QLabel *gameState;
+                    QLabel *gameStateLabel;
+                    QLabel *gameIcon;
+                    
+                    /* Global Variables */
+                    bool gameState;
+                    qint64 startTime;
+                    QString bad;
+                    QString god;
+                    QString neutral;
 
+        private slots:
+                    void buttonClicked(void);
 };
 
 #endif // DOPPELCLICK_H
