@@ -30,7 +30,7 @@ Doppelclick::Doppelclick (QWidget *parent) :
         QWidget(parent) 
 {
         /* Initialize variables */
-        gameState = false;
+        gameRunning = false;
         startTime = 0;
         bad = "<img src='images/bad.jpg'>";
         god = "<img src='images/god.jpg'>";
@@ -51,19 +51,24 @@ Doppelclick::Doppelclick (QWidget *parent) :
  */
 void Doppelclick::buttonClicked(void)
 {
-        if (!gameState) {
-                gameState = true;
-                startTime = QDateTime::currentMSecsSinceEpoch();
-                gameStateLabel->setText("<b>Start ...</b>");
-        } else {
-                gameState = false;
-                qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
-                qint64 diffTime = stopTime - startTime;
-                QString result = "<b>Ergebnis: ";
-                result.append(QString::number(diffTime));
-                result.append(" </b>");
-                gameStateLabel->setText(result);
-        }
+	if (!gameRunning) {
+		gameRunning = true;
+		startTime = QDateTime::currentMSecsSinceEpoch();
+		gameStateLabel->setText("<b>Start ...</b>");
+		gameIcon->setText(neutral);
+	} else {
+		gameRunning = false;
+		qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
+		qint64 diffTime = stopTime - startTime;
+		if (diffTime <= 1000)
+			gameIcon->setText(god);
+		else
+			gameIcon->setText(bad);
+		QString result = "<b>Ergebnis: ";
+		result.append(QString::number(diffTime));
+		result.append(" </b>");
+		gameStateLabel->setText(result);
+	}
 }
 
 
@@ -87,7 +92,7 @@ void Doppelclick::initializeUi(void)
         mainLayout->setObjectName("MainLayout");
 
         /* Layout for Button and smilies */
-        QHBoxLayout *doppelLayout = new QHBoxLayout(this);
+        QHBoxLayout *doppelLayout = new QHBoxLayout();
         doppelLayout->setObjectName("DoppelLayout");
 
         /* Settings for the doppelButton */

@@ -27,11 +27,13 @@ class Doppelclick : public QWidget
                     QLabel *gameIcon;
                     
                     /* Global Variables */
-                    bool gameState;
+					bool gameRunning;
                     qint64 startTime;
                     QString bad;
                     QString god;
                     QString neutral;
+
+
 
         private slots:
                     void buttonClicked(void);
