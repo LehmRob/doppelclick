@@ -32,9 +32,10 @@ Doppelclick::Doppelclick (QWidget *parent) :
         /* Initialize variables */
         gameState = false;
         startTime = 0;
-        bad = "<img src='images/bad.jpg'>";
-        god = "<img src='images/god.jpg'>";
-        neutral = "<img src='images/neutral.jpg'>";
+        badImage = "<img src='images/bad.jpg'>";
+        godImage = "<img src='images/god.jpg'>";
+        neutralImage= "<img src='images/neutral.jpg'>";
+		state = wait;
 
         /* Initialize the UI */
         initializeUi();
@@ -96,7 +97,7 @@ void Doppelclick::initializeUi(void)
         doppelButton->setMinimumHeight(60);
         doppelButton->setMinimumWidth(100);
 
-        gameIcon = new QLabel(neutral);
+        gameIcon = new QLabel(neutralImage);
 
         doppelLayout->addWidget(doppelButton);
         doppelLayout->addWidget(gameIcon);
