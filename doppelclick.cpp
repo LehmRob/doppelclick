@@ -23,6 +23,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDateTime>
+#include <QDebug>
+#include <QGroupBox>
 
 #include "doppelclick.h"
 
@@ -35,13 +37,14 @@ QWidget(parent)
 	bad = "<img src='images/bad.jpg'>";
 	god = "<img src='images/god.jpg'>";
     neutral = "<img src='images/neutral.jpg'>";
+	timeDifficult = TIME_EASY;
 
     /* Initialize the UI */
     initializeUi();
 
     /* Connect signals */
     connect(doppelButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    connect(diffiSlider, SIGNAL(valueChanged(int)), this, SLOT(changeDifficulty));
+    connect(diffiSlider, SIGNAL(valueChanged(int)), this, SLOT(setDifficulty(int)));
 }
 
 /******************************************************************************
@@ -61,7 +64,7 @@ void Doppelclick::buttonClicked(void)
 		gameRunning = false;
 		qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
 		qint64 diffTime = stopTime - startTime;
-        if (diffTime <= diffiVal)
+        if (diffTime <= timeDifficult)
 			gameIcon->setText(god);
 		else
 			gameIcon->setText(bad);
@@ -72,12 +75,23 @@ void Doppelclick::buttonClicked(void)
 	}
 }
 
-void Doppelclick::changeDifficulty()
+void Doppelclick::setDifficulty(int value)
 {
-    switch(diffiSlider->value())
+    switch(value)
     {
         case 1:
+			timeDifficult = TIME_EASY;
+			break;
+		case 2:
+			timeDifficult = TIME_NORMAL;
+			break;
+		case 3: 
+			timeDifficult = TIME_HARD;
+			break;
     }
+#ifdef DEBUG
+	qDebug() << "Difficult Time: " << timeDifficult;
+#endif
 }
 
 /*****************************************************************************
@@ -102,7 +116,7 @@ void Doppelclick::initializeUi(void)
 	/* Settings for the doppelButton */
 	doppelButton = new QPushButton("Doppelclick");
 	doppelButton->setObjectName("DoppelButton");
-	doppelButton->setMinimumHeight(60);
+	doppelButton->setMinimumHeight(100);
 	doppelButton->setMinimumWidth(100);
 
 	gameIcon = new QLabel(neutral);
@@ -111,11 +125,25 @@ void Doppelclick::initializeUi(void)
 	diffiSlider = new QSlider();
 	diffiSlider->setMinimum(1);
     diffiSlider->setMaximum(3);
-	diffiSlider->setTickPosition(QSlider::TicksRight);
 
 	doppelLayout->addWidget(doppelButton);
 	doppelLayout->addWidget(gameIcon);
-	doppelLayout->addWidget(diffiSlider);
+
+	/* Place for the difficult settings */
+	QGroupBox *difficultBox = new QGroupBox(tr("Schwierigkeit"));
+	QHBoxLayout *difficultLayout = new QHBoxLayout();
+	QVBoxLayout *tickLabelLayout = new QVBoxLayout();
+
+	tickLabelLayout->addWidget(new QLabel("Schwer"));
+	tickLabelLayout->addWidget(new QLabel("Normal"));
+	tickLabelLayout->addWidget(new QLabel("Leicht"));
+	
+	difficultLayout->addWidget(diffiSlider);
+	difficultLayout->addLayout(tickLabelLayout);
+	difficultBox->setLayout(difficultLayout);
+
+
+	doppelLayout->addWidget(difficultBox);
 	
 	/* Settings for the gameState */
 	QLabel *line = new QLabel("<hr>");
