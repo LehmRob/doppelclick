@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QPixmap>
+#include <QSlider>
 
 namespace Ui {
         class Doppelclick;
@@ -12,29 +13,34 @@ namespace Ui {
 
 class Doppelclick : public QWidget
 {
-            Q_OBJECT
+	Q_OBJECT
 
-        public:
-                    explicit Doppelclick(QWidget *parent=0);
+	public:
+		explicit Doppelclick(QWidget *parent=0);
 
-        private:
-                    /* private Methodes */
-                    void initializeUi(void);
+	private:
+		/* private Methodes */
+		void initializeUi(void);
 
-                    /* GUI Elements */
-                    QPushButton *doppelButton;
-                    QLabel *gameStateLabel;
-                    QLabel *gameIcon;
-                    
-                    /* Global Variables */
-                    bool gameState;
-                    qint64 startTime;
-                    QString bad;
-                    QString god;
-                    QString neutral;
+		/* GUI Elements */
+		QPushButton *doppelButton;
+		QLabel *gameStateLabel;
+		QLabel *gameIcon;
+		QSlider *diffiSlider;
+		
+		/* Global Variables */
+		bool gameRunning;
+		qint64 startTime;
+		QString bad;
+		QString god;
+        QString neutral;
+        qint64 diffiVal;
 
-        private slots:
-                    void buttonClicked(void);
+
+
+	private slots:
+        void buttonClicked(void);
+        void changeDifficulty(void);
 };
 
 #endif // DOPPELCLICK_H

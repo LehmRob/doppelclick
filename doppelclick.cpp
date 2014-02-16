@@ -27,21 +27,21 @@
 #include "doppelclick.h"
 
 Doppelclick::Doppelclick (QWidget *parent) :
-        QWidget(parent) 
+QWidget(parent) 
 {
-        /* Initialize variables */
-        gameState = false;
-        startTime = 0;
-        badImage = "<img src='images/bad.jpg'>";
-        godImage = "<img src='images/god.jpg'>";
-        neutralImage= "<img src='images/neutral.jpg'>";
-		state = wait;
+	/* Initialize variables */
+	gameRunning = false;
+	startTime = 0;
+	bad = "<img src='images/bad.jpg'>";
+	god = "<img src='images/god.jpg'>";
+    neutral = "<img src='images/neutral.jpg'>";
 
-        /* Initialize the UI */
-        initializeUi();
+    /* Initialize the UI */
+    initializeUi();
 
-        /* Connect signals */
-        connect(doppelButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    /* Connect signals */
+    connect(doppelButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    connect(diffiSlider, SIGNAL(valueChanged(int)), this, SLOT(changeDifficulty));
 }
 
 /******************************************************************************
@@ -52,21 +52,33 @@ Doppelclick::Doppelclick (QWidget *parent) :
  */
 void Doppelclick::buttonClicked(void)
 {
-        if (!gameState) {
-                gameState = true;
-                startTime = QDateTime::currentMSecsSinceEpoch();
-                gameStateLabel->setText("<b>Start ...</b>");
-        } else {
-                gameState = false;
-                qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
-                qint64 diffTime = stopTime - startTime;
-                QString result = "<b>Ergebnis: ";
-                result.append(QString::number(diffTime));
-                result.append(" </b>");
-                gameStateLabel->setText(result);
-        }
+	if (!gameRunning) {
+		gameRunning = true;
+		startTime = QDateTime::currentMSecsSinceEpoch();
+		gameStateLabel->setText("<b>Start ...</b>");
+		gameIcon->setText(neutral);
+	} else {
+		gameRunning = false;
+		qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
+		qint64 diffTime = stopTime - startTime;
+        if (diffTime <= diffiVal)
+			gameIcon->setText(god);
+		else
+			gameIcon->setText(bad);
+		QString result = "<b>Ergebnis: ";
+		result.append(QString::number(diffTime));
+		result.append(" </b>");
+		gameStateLabel->setText(result);
+	}
 }
 
+void Doppelclick::changeDifficulty()
+{
+    switch(diffiSlider->value())
+    {
+        case 1:
+    }
+}
 
 /*****************************************************************************
  * Private Methods                                                           *
@@ -76,40 +88,43 @@ void Doppelclick::buttonClicked(void)
  */
 void Doppelclick::initializeUi(void) 
 {
-        /* Settings for the Main Window */
-        setWindowTitle("Doppelclick Spiel");
-        /*
-         *setMinimumHeight(200);
-         *setMinimumWidth(200);gameIcon);gameIcon);gameIcon);
-         */
+	/* Settings for the Main Window */
+	setWindowTitle("Doppelclick Spiel");
 
-        /* Settings for the MainLayout */
-        QVBoxLayout *mainLayout = new QVBoxLayout(this);
-        mainLayout->setObjectName("MainLayout");
+	/* Settings for the MainLayout */
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+	mainLayout->setObjectName("MainLayout");
 
-        /* Layout for Button and smilies */
-        QHBoxLayout *doppelLayout = new QHBoxLayout(this);
-        doppelLayout->setObjectName("DoppelLayout");
+	/* Layout for Button and smilies */
+	QHBoxLayout *doppelLayout = new QHBoxLayout();
+	doppelLayout->setObjectName("DoppelLayout");
 
-        /* Settings for the doppelButton */
-        doppelButton = new QPushButton("Doppelclick");
-        doppelButton->setObjectName("DoppelButton");
-        doppelButton->setMinimumHeight(60);
-        doppelButton->setMinimumWidth(100);
+	/* Settings for the doppelButton */
+	doppelButton = new QPushButton("Doppelclick");
+	doppelButton->setObjectName("DoppelButton");
+	doppelButton->setMinimumHeight(60);
+	doppelButton->setMinimumWidth(100);
 
-        gameIcon = new QLabel(neutralImage);
+	gameIcon = new QLabel(neutral);
 
-        doppelLayout->addWidget(doppelButton);
-        doppelLayout->addWidget(gameIcon);
-        
-        /* Settings for the gameState */
-        QLabel *line = new QLabel("<hr>");
-        gameStateLabel = new QLabel("<b>Bereit ...</b>");
+	/* Settings for Difficulty Slider*/
+	diffiSlider = new QSlider();
+	diffiSlider->setMinimum(1);
+    diffiSlider->setMaximum(3);
+	diffiSlider->setTickPosition(QSlider::TicksRight);
 
-        /* Add widgets to the MainLayout */
-        mainLayout->insertLayout(-1, doppelLayout, 0);
-        mainLayout->addWidget(line);
-        mainLayout->addWidget(gameStateLabel);
+	doppelLayout->addWidget(doppelButton);
+	doppelLayout->addWidget(gameIcon);
+	doppelLayout->addWidget(diffiSlider);
+	
+	/* Settings for the gameState */
+	QLabel *line = new QLabel("<hr>");
+	gameStateLabel = new QLabel("<b>Bereit ...</b>");
+
+	/* Add widgets to the MainLayout */
+	mainLayout->insertLayout(-1, doppelLayout, 0);
+	mainLayout->addWidget(line);
+	mainLayout->addWidget(gameStateLabel);
 }
 
 
