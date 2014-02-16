@@ -34,13 +34,13 @@ class Doppelclick : public QWidget
 		QString bad;
 		QString god;
         QString neutral;
-        qint64 diffiVal;
+        qint64 timeDifficult;
 
 
 
 	private slots:
         void buttonClicked(void);
-        void changeDifficulty(void);
+        void setDifficulty(int value);
 };
 
 #endif // DOPPELCLICK_H
