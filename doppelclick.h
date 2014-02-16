@@ -7,6 +7,10 @@
 #include <QPixmap>
 #include <QSlider>
 
+#define TIME_HARD 200
+#define TIME_NORMAL 400
+#define TIME_EASY 600
+
 namespace Ui {
         class Doppelclick;
 }
