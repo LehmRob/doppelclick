@@ -34,9 +34,6 @@ QWidget(parent)
 	/* Initialize variables */
 	gameRunning = false;
 	startTime = 0;
-	bad = "<img src='images/bad.jpg'>";
-	god = "<img src='images/god.jpg'>";
-    neutral = "<img src='images/neutral.jpg'>";
 	timeDifficult = TIME_EASY;
 
     /* Initialize the UI */
@@ -59,19 +56,20 @@ void Doppelclick::buttonClicked(void)
 		gameRunning = true;
 		startTime = QDateTime::currentMSecsSinceEpoch();
 		gameStateLabel->setText("<b>Start ...</b>");
-		gameIcon->setText(neutral);
+		gameIcon->setText(NEUTRAL);
 	} else {
 		gameRunning = false;
 		qint64 stopTime = QDateTime::currentMSecsSinceEpoch();
 		qint64 diffTime = stopTime - startTime;
         if (diffTime <= timeDifficult)
-			gameIcon->setText(god);
+			gameIcon->setText(GOOD);
 		else
-			gameIcon->setText(bad);
+			gameIcon->setText(BAD);
 		QString result = "<b>Ergebnis: ";
 		result.append(QString::number(diffTime));
 		result.append(" </b>");
 		gameStateLabel->setText(result);
+		emit gameFinished();
 	}
 }
 
@@ -119,7 +117,7 @@ void Doppelclick::initializeUi(void)
 	doppelButton->setMinimumHeight(100);
 	doppelButton->setMinimumWidth(100);
 
-	gameIcon = new QLabel(neutral);
+	gameIcon = new QLabel(NEUTRAL);
 
 	/* Settings for Difficulty Slider*/
 	diffiSlider = new QSlider();
